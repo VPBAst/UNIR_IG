@@ -15,7 +15,7 @@
 #include <math.h>
 #include <time.h>
 
-//DEFINICIï¿½N DE CONSTANTES
+//DEFINICION DE CONSTANTES
 
 const GLfloat v_x = 100.0f;
 const GLfloat v_y = 100.0f;
@@ -61,7 +61,7 @@ void PaintCircle( float radius)
    
 }
 
-/*Aï¿½ADIR MARCAS AL RELOJO **************************************************************************************/
+/*AÑADIR MARCAS AL RELOJO **************************************************************************************/
 void addMarks()
 {
     double x,y;
@@ -109,7 +109,7 @@ void PaintClock()
     glColor3f(1.0f, 1.0f, 1.0f); 
     PaintCircle(CLOCK_RADIUS+5);
      
-   //Se aï¿½adan marcas horarias
+   //Se añadan marcas horarias
     glColor3f(1.0,0.0,0.0);
     addMarks();
  
