@@ -1,11 +1,10 @@
 /* 
  * File:   solution.c
- * Actividad: trabajo grupal
+ * Actividad: IGReloj - trabajo grupal
  * Authores: SILVA PEREZ, OLIVER
- * 
- * 
+ * 			 LOSPITAO RUIZ, RUTH
+ *           PATALLO BERMUDEZ, VICTOR 
 * 
- * * Created on 31 de octubre de 2021, 15:24
  */
 
 #include <stdio.h>
@@ -16,7 +15,7 @@
 #include <math.h>
 #include <time.h>
 
-//DEFINICIÓN DE CONSTANTES
+//DEFINICIï¿½N DE CONSTANTES
 
 const GLfloat v_x = 100.0f;
 const GLfloat v_y = 100.0f;
@@ -61,7 +60,8 @@ void PaintCircle( float radius)
 
    
 }
-/*AÑADIR MARCAS AL RELOJO **************************************************************************************/
+
+/*Aï¿½ADIR MARCAS AL RELOJO **************************************************************************************/
 void addMarks()
 {
     double x,y;
@@ -95,72 +95,90 @@ void addMarks()
 		}
 		count++;
 	}
-}
+}/******************************************************************************************************/
 
-/**************************************************************************************************************/
+
+// PINTAR RELOJ*****************************************************************************************/
 void PaintClock()
-    //Dibuja estrucutra del reloj
-{ 
+{
     glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(1.0,0.0,0.0);
-    glEnable(GL_POINT_SIZE);
-    
-  
-/* 
- *     //representar coordenadas 
-       glBegin(GL_LINES);
-        glVertex2i(-100,0);
-        glVertex2i(100,0);
-        glVertex2i(0,-100);
-        glVertex2i(0,100);
-        glEnd();
-*/
-        
-    // Pinta cículo externo.
+    glColor3f(1.0f, 0.0f, 0.0f); 
     PaintCircle(CLOCK_RADIUS+10);
-    // Pinta cículo externo.
+
     
-    glColor3f(1.0,1.0,1.0);
+    glColor3f(1.0f, 1.0f, 1.0f); 
     PaintCircle(CLOCK_RADIUS+5);
-    
-    //Se añadan marcas horarias
+     
+   //Se aï¿½adan marcas horarias
     glColor3f(1.0,0.0,0.0);
     addMarks();
-   
-    // glLoadIdentity(); // Limpa as transformaciones
-     
+ 
+    
     //SEGUNDERO. calculamos angulo segundos y pintamos segundero
     secondAngle = second * 6;
-    //rotar coseno en sentido agujas reloj
+    
+  //rotar coseno en sentido agujas reloj
     glRotatef(-secondAngle, 0.0f, 0.0f, 1.0f);
+
     glBegin(GL_LINES);
     glColor3f(1.0f, 0.0f, 0.0f); 
     glVertex2i(0,0);
     glVertex2i(0,sy);
     glEnd();
-        
-   
-  
-    //MANECILLAS MINUTOS
-    minuteAngle= minute * 6;
+    
+    glLoadIdentity(); 
+
+   //MANECILLAS MINUTOS
+    minuteAngle = minute * 6;
     glRotatef(-minuteAngle, 0.0f, 0.0f, 1.0f);
     glLineWidth(5);
     glBegin(GL_LINES);
-    glColor3f(0.0f, 1.0f, 0.0f); 
+    glColor3f(0.0f, 1.0f, 0.0f);
     glVertex2i(0,0);
     glVertex2i(0,my);
     glEnd();
     
-    hourAngle= (hour + minute /60.0) *30;
-    glRotatef(-minuteAngle, 0.0f, 0.0f, 1.0f);
+    glLoadIdentity(); 
+
+    hourAngle = (hour + hour/60.0) * 30;
+    glRotatef(-hourAngle, 0.0f, 0.0f, 1.0f);
     glBegin(GL_LINES);
-    glColor3f(0.0f, 0.0f, 1.0f); 
+    glColor3f(0.0f, 0.0f, 1.0f);
     glVertex2i(0,0);
     glVertex2i(0,hy);
     glEnd();
-       
+    
+    glLoadIdentity(); 
     glFlush();
+}
+
+void redimensiona(GLsizei largo, GLsizei alto)
+{
+    
+    glViewport(0, 0, largo, alto);    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    
+    if (largo <= alto)
+       gluOrtho2D(-v_x, v_x, -v_y * alto / largo, v_y * alto / largo);
+    else
+     gluOrtho2D(-v_x * largo / alto, v_x * largo / alto, -v_y, v_y);
+       
+   
+}
+
+void advance(int n)
+{
+ 
+     time_t hora = time(0);
+     struct tm *datahora = localtime(&hora);
      
+     hour = datahora->tm_hour;
+     minute = datahora->tm_min;
+     second = datahora->tm_sec;
+     
+     glutPostRedisplay(); 
+     glutTimerFunc(1000, advance, 0);     
 }
 
 
@@ -178,19 +196,14 @@ void init_gl(int argc, char *argv[]) {
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-int main(int argc, char *argv[]) {
-	//inicialiciones de glut		
+int main(int argc, char** argv) {
+
+    
+    //inicialiciones de glut		
 	init_gl (argc, argv);
-        //pinta el Reloj
 	glutDisplayFunc(PaintClock);
-        
-        // falta realizar
-       //glutReshapeFunc(redimensionar);
-        
-        //glutPostRedisplay();
-        // añadir temporizador
-        glutMainLoop();
-	
+	glutReshapeFunc(redimensiona);
+	glutTimerFunc(1000, advance, 0);
+	glutMainLoop();
 	return 0;
 }
-
