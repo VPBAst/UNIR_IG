@@ -1,10 +1,13 @@
 /* 
  * File:   solution.c
+ * Date: November, 2021
  * Actividad: IGReloj - trabajo grupal
  * Authores: SILVA PEREZ, OLIVER
  * 			 LOSPITAO RUIZ, RUTH
  *           PATALLO BERMUDEZ, VICTOR 
-* 
+ *           GARCÍA GARIJO, ALBERTO
+ *           BELDA DIEPPA, RUYMAN   
+ * 
  */
 
 #include <stdio.h>
@@ -257,3 +260,4 @@ int main(int argc, char** argv) {
 	
 	return 0;
 }
+
